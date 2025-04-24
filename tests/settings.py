@@ -8,7 +8,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'logger_extra',
-    'logger_extra.tests',
+    'tests',
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -38,3 +38,5 @@ TEMPLATES = [
         },
     },
 ]
+
+USE_TZ = True
