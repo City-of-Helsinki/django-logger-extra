@@ -1,3 +1,21 @@
+<!-- START doctoc generated TOC please keep comment here to allow auto update -->
+<!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
+**Table of Contents**  *generated with [DocToc](https://github.com/thlorenz/doctoc)*
+
+- [Logger extras for simplified structured logging.](#logger-extras-for-simplified-structured-logging)
+  - [Adding django-logger-extra your Django project](#adding-django-logger-extra-your-django-project)
+    - [Adding django-resilient-logger Django apps](#adding-django-resilient-logger-django-apps)
+    - [Configuring logger formatter in settings.py:](#configuring-logger-formatter-in-settingspy)
+    - [Configuring middleware in settings.py:](#configuring-middleware-in-settingspy)
+  - [Logger context usage](#logger-context-usage)
+- [Development](#development)
+  - [Running tests](#running-tests)
+  - [Code format](#code-format)
+  - [Git blame ignore refs](#git-blame-ignore-refs)
+  - [Commit message format](#commit-message-format)
+
+<!-- END doctoc generated TOC please keep comment here to allow auto update -->
+
 # Logger extras for simplified structured logging.
 
 `django-logger-extra` is a collection of logger extras that makes structured logging setup easier.
@@ -56,7 +74,7 @@ MIDDLEWARE = [
 ```
 
 ## Logger context usage
-Active context can be appended with `with_logger_context` function. It will return current 
+Active context can be appended with `with_logger_context` function. It will return current
 context as resource. The current context can also be read using function `get_logger_context`.
 ```python
 import logging
