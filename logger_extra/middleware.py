@@ -5,7 +5,7 @@ from django.http import HttpRequest, HttpResponse
 
 from logger_extra.logger_context import with_logger_context
 
-type GetResponseFn = Callable[[HttpRequest], HttpResponse]
+GetResponseFn = Callable[[HttpRequest], HttpResponse]
 
 class RequestIdMiddlewareBase:
   request_header: str
