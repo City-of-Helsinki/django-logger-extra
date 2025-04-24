@@ -3,7 +3,7 @@ name = "django-logger-extra"
 authors = [{ name = "City of Helsinki", email = "dev@hel.fi" }]
 description = "A module that provides extras for logger."
 readme = "README.md"
-version = "0.1.1"
+version = "0.0.0"
 keywords=[
     "logging",
     "extra tools",
