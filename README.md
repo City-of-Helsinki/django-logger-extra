@@ -37,7 +37,7 @@ INSTALLED_APPS = (
 
 ### Configuring logger formatter in settings.py:
 To make use of the JSON formatter it must be configured in setting's LOGGING section.
-Filter is optional and brings `with_logger_context()` contexts available as logger extras.
+Filter is optional and brings `logger_context()` contexts available as logger extras.
 
 ```python
 LOGGING = {
@@ -74,22 +74,22 @@ MIDDLEWARE = [
 ```
 
 ## Logger context usage
-Active context can be appended with `with_logger_context` function. It will return current
+Active context can be appended with `logger_context` function. It will return current
 context as resource. The current context can also be read using function `get_logger_context`.
 ```python
 import logging
 from django.http import HttpRequest, JsonResponse
 
-from logger_extra.logger_context import with_logger_context
+from logger_extra.logger_context import logger_context
 
 logger = logging.getLogger("audit")
 
 def bar():
-  with with_logger_context({ "who": "World" }) as ctx:
+  with logger_context({ "who": "World" }) as ctx:
     logger.info(f"{ctx['greet']} {ctx['who']}")
 
 def foo():
-  with with_logger_context({ "greet": "Hello" }):
+  with logger_context({ "greet": "Hello" }):
     bar()
     return JsonResponse({})
 ```

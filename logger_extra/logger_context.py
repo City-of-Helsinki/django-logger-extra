@@ -8,7 +8,7 @@ _logger_context: ContextVar[LoggerContext] = ContextVar("LoggerContext", default
 
 
 @contextmanager
-def with_logger_context(ctx: LoggerContext):
+def logger_context(ctx: LoggerContext):
     token: Token[LoggerContext]
 
     try:

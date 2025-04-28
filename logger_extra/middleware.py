@@ -3,7 +3,7 @@ from collections.abc import Callable
 
 from django.http import HttpRequest, HttpResponse
 
-from logger_extra.logger_context import with_logger_context
+from logger_extra.logger_context import logger_context
 
 GetResponseFn = Callable[[HttpRequest], HttpResponse]
 
@@ -27,7 +27,7 @@ class RequestIdMiddlewareBase:
         # Get request id from source header or generate one here.
         request_id = request.headers.get(self.request_header, uuid.uuid4())
 
-        with with_logger_context({"request_id": request_id}):
+        with logger_context({"request_id": request_id}):
             response = self.get_response(request)
             response[self.response_header] = request_id
 
