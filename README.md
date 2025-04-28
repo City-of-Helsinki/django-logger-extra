@@ -18,12 +18,29 @@ INSTALLED_APPS = (
 ```
 
 ### Configuring logger formatter in settings.py:
+To make use of the JSON formatter it must be configured in setting's LOGGING section.
+Filter is optional and brings `with_logger_context()` contexts available as logger extras.
+
 ```python
 LOGGING = {
+    'filters': {
+        'context': {
+            '()': 'logger_extra.filter.LoggerContextFilter',
+        }
+        ...
+    },
     'formatters': {
         'json': {
             '()': 'logger_extra.formatter.JSONFormatter',
         }
+        ...
+    },
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+            'formatter': 'json',
+            'filters': ['context']
+        },
         ...
     },
     ...

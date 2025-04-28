@@ -10,19 +10,17 @@ os.chdir(os.path.normpath(os.path.join(os.path.abspath(__file__), os.pardir)))
 
 setup(
     name="django-logger-extra",
-    version="0.1.0",
+    version="0.1.1",
     packages=["logger_extra"],
     include_package_data=True,
     license="MIT",
     description="A module that provides extras for logger.",
     long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/City-of-Helsinki/logger-cfg-python",
+    url="https://github.com/City-of-Helsinki/django-logger-extra",
     author="City of Helsinki",
     author_email="dev@hel.fi",
-    install_requires=[
-        "JSON-log-formatter>=1.1.1"
-    ],
+    install_requires=[],
     classifiers=[
         "Environment :: Web Environment",
         "Intended Audience :: Developers",
