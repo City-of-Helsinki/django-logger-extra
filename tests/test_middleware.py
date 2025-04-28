@@ -77,6 +77,19 @@ def test_add_logger_context_in_log_record(caplog, client, settings):
     assert record.foo == "bar"
 
 
+def test_logger_context_ignores_builtins(caplog, client, settings):
+    settings.MIDDLEWARE = [
+        "logger_extra.middleware.XRequestIdMiddleware",
+    ]
+
+    client.get("/parrot", {"message": "overridden"})
+
+    assert len(caplog.records) == 1
+    record = caplog.records[0]
+    assert record.request_id
+    assert record.message != "overridden"
+
+
 def test_request_id_is_logged_on_error(caplog, client, settings):
     settings.MIDDLEWARE = [
         "logger_extra.middleware.XRequestIdMiddleware",

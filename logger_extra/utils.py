@@ -33,6 +33,10 @@ LOG_RECORD_BUILTIN_ATTRS = {
 }
 
 
+def is_builtin_attr(key: str) -> bool:
+    return key in LOG_RECORD_BUILTIN_ATTRS
+
+
 def parse_log_record_extra(record: logging.LogRecord) -> Dict[str, str]:
     """
     Logger's `extra` fields are stored inside record's __dict__.
@@ -42,7 +46,7 @@ def parse_log_record_extra(record: logging.LogRecord) -> Dict[str, str]:
     extra: Dict[str, Any] = {}
 
     for key in record.__dict__:
-        if key in LOG_RECORD_BUILTIN_ATTRS:
+        if is_builtin_attr(key):
             continue
 
         extra[key] = record.__dict__[key]
