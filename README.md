@@ -38,6 +38,29 @@ MIDDLEWARE = [
 ]
 ```
 
+## Logger context usage
+Active context can be appended with `with_logger_context` function. It will return current 
+context as resource. The current context can also be read using function `get_logger_context`.
+```python
+import logging
+from django.http import HttpRequest, JsonResponse
+
+from logger_extra.logger_context import with_logger_context
+
+logger = logging.getLogger("audit")
+
+def bar():
+  with with_logger_context({ "who": "World" }) as ctx:
+    logger.info(f"{ctx['greet']} {ctx['who']}")
+
+def foo():
+  with with_logger_context({ "greet": "Hello" }):
+    bar()
+    return JsonResponse({})
+```
+
+Will result log entry that looks like:
+`{"message": "Hello World", "level": "INFO", "time": "2025-04-14T11:08:22.962222+00:00", "context": {"request_id": "95e787b5-4ce8-46ef-bb6e-31651fc8774b", "greet": "Hello", "who": "World"}}`
 # Development
 
 Virtual Python environment can be used. For example:
