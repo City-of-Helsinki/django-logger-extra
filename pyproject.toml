@@ -39,6 +39,9 @@ license-files = ["LICENSE"]
 dependencies = ["django>=4.2",]
 
 [project.optional-dependencies]
+extras = [
+    "django-auditlog"
+]
 test = [
     "pytest",
     "pytest-django",
