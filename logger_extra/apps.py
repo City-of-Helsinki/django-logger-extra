@@ -1,8 +1,7 @@
 import logging
 
 from django.apps import AppConfig
-
-from logger_extra.extras.configure import configure_django_auditlog
+from django.conf import settings
 
 logger = logging.getLogger(__name__)
 
@@ -12,4 +11,11 @@ class LoggerExtraConfig(AppConfig):
     name = "logger_extra"
 
     def ready(self):
-        configure_django_auditlog()
+        from logger_extra.extras.django_auditlog import enable_django_auditlog_augment
+
+        augment_enabled = getattr(
+            settings, "LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG", False
+        )
+
+        if augment_enabled and not enable_django_auditlog_augment():
+            logger.error("failed to augment django-auditlog.")
