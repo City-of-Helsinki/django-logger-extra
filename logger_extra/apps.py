@@ -3,6 +3,8 @@ import logging
 from django.apps import AppConfig
 from django.conf import settings
 
+from logger_extra.extras.django_auditlog import enable_django_auditlog_augment
+
 logger = logging.getLogger(__name__)
 
 
@@ -11,8 +13,6 @@ class LoggerExtraConfig(AppConfig):
     name = "logger_extra"
 
     def ready(self):
-        from logger_extra.extras.django_auditlog import enable_django_auditlog_augment
-
         augment_enabled = getattr(
             settings, "LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG", False
         )

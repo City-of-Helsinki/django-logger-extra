@@ -76,7 +76,7 @@ lint = [
     "pre-commit install",
     "pre-commit run -a",
 ]
-manage = "tests/manage.py {args}"
+manage = "python tests/manage.py {args}"
 
 [tool.hatch.envs.hatch-test]
 default-args = ["tests"]
