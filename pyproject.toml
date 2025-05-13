@@ -51,6 +51,8 @@ test = [
     "pytest-rerunfailures",
     "pytest-xdist[psutil]",
 ]
+auditlog = ["django-auditlog"]
+all = ["django-logger-extra[auditlog]", "django-logger-extra[test]"]
 
 [project.urls]
 Homepage = "https://github.com/City-of-Helsinki/django-logger-extra"
@@ -66,7 +68,7 @@ path = "logger_extra/__init__.py"
 dependencies = [
     "pre-commit",
 ]
-features = ["test"]
+features = ["all"]
 python = "3.9"
 type = "virtual"
 path = ".venv"
@@ -81,7 +83,7 @@ manage = "tests/manage.py {args}"
 
 [tool.hatch.envs.hatch-test]
 default-args = ["tests"]
-features = ["test"]
+features = ["all"]
 matrix-name-format = "dj{value}"
 parallel = false
 randomize = true
@@ -150,4 +152,4 @@ omit = ["logger_extra/migrations/*", "*/tests/*"]
 plugins = ["mypy_django_plugin.main"]
 
 [tool.django-stubs]
-django_settings_module = "myproject.settings"
+django_settings_module = "tests.settings"

@@ -1,6 +1,8 @@
 import logging
+
 from django.apps import AppConfig
 
+from logger_extra.extras.configure import configure_django_auditlog
 
 logger = logging.getLogger(__name__)
 
@@ -10,13 +12,4 @@ class LoggerExtraConfig(AppConfig):
     name = "logger_extra"
 
     def ready(self):
-        try:
-            from logger_extra.extras.django_auditlog import (
-                augment_django_auditlog_extras,
-            )
-
-            augment_django_auditlog_extras()
-        except ImportError:
-            logger.warning(
-                "Failed to import logger_extra.extras.django_auditlog, most likely django-auditlog is not installed."
-            )
+        configure_django_auditlog()

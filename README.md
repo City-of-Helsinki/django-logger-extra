@@ -73,6 +73,14 @@ MIDDLEWARE = [
 ]
 ```
 
+## django-auditlog extra context.
+This library can also augment django-auditlog's additional_data fields with active context.
+To enable this, optional package `django-auditlog` must be installed and it must be explicitly enabled 
+in settings.py file.
+```python
+LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG = True
+```
+
 ## Logger context usage
 Active context can be appended with `logger_context` function. It will return current
 context as resource. The current context can also be read using function `get_logger_context`.
