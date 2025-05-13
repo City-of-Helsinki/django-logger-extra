@@ -16,7 +16,5 @@ class ExtrasTestCase(TestCase):
 
     @override_settings(LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG=True)
     def test_configure_enabled_django_auditlog_missing(self):
-        with mock.patch.dict('sys.modules', {
-            'auditlog.models': None
-        }):
+        with mock.patch.dict("sys.modules", {"auditlog.models": None}):
             assert not configure_django_auditlog()

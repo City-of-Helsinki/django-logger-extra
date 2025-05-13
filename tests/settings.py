@@ -5,7 +5,7 @@ INSTALLED_APPS = (
     "django.contrib.contenttypes",
     "logger_extra",
     "tests",
-    "auditlog"
+    "auditlog",
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"

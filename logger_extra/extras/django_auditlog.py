@@ -11,9 +11,7 @@ def augment_django_auditlog():
         from auditlog.models import LogEntry
 
         def _augment_django_auditlog(
-                sender: Type[LogEntry],
-                instance: LogEntry,
-                **kwargs
+            sender: Type[LogEntry], instance: LogEntry, **kwargs
         ):
             if sender != LogEntry or not isinstance(instance, LogEntry):
                 return False
@@ -30,6 +28,3 @@ def augment_django_auditlog():
         return True
     except ImportError:
         return False
-
-
-
