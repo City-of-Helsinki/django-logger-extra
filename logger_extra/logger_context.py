@@ -1,8 +1,8 @@
 from contextlib import contextmanager
 from contextvars import ContextVar, Token
-from typing import Any, Dict
+from typing import Any
 
-LoggerContext = Dict[str, Any]
+LoggerContext = dict[str, Any]
 
 _logger_context: ContextVar[LoggerContext] = ContextVar("LoggerContext", default=None)
 

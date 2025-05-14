@@ -1,7 +1,7 @@
 import logging
 from datetime import date, datetime
 from socket import socket
-from typing import Any, Dict
+from typing import Any
 from uuid import UUID
 
 from django.http import HttpRequest
@@ -37,13 +37,13 @@ def is_builtin_attr(key: str) -> bool:
     return key in LOG_RECORD_BUILTIN_ATTRS
 
 
-def parse_log_record_extra(record: logging.LogRecord) -> Dict[str, str]:
+def parse_log_record_extra(record: logging.LogRecord) -> dict[str, str]:
     """
     Logger's `extra` fields are stored inside record's __dict__.
     This method extracts those as separate dictionary.
     """
 
-    extra: Dict[str, Any] = {}
+    extra: dict[str, Any] = {}
 
     for key in record.__dict__:
         if is_builtin_attr(key):

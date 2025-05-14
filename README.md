@@ -7,6 +7,7 @@
     - [Adding django-resilient-logger Django apps](#adding-django-resilient-logger-django-apps)
     - [Configuring logger formatter in settings.py:](#configuring-logger-formatter-in-settingspy)
     - [Configuring middleware in settings.py:](#configuring-middleware-in-settingspy)
+  - [django-auditlog extra context.](#django-auditlog-extra-context)
   - [Logger context usage](#logger-context-usage)
 - [Development](#development)
   - [Running tests](#running-tests)
@@ -71,6 +72,14 @@ MIDDLEWARE = [
     'logger_extra.middleware.XRequestIdMiddleware',
     ...
 ]
+```
+
+## django-auditlog extra context.
+This library can also augment django-auditlog's additional_data fields with active context.
+To enable this, optional package `django-auditlog` must be installed and it must be explicitly enabled
+in settings.py file.
+```python
+LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG = True
 ```
 
 ## Logger context usage
