@@ -5,7 +5,6 @@ from auditlog.models import LogEntry
 from django.test import TestCase
 
 from logger_extra.extras.django_auditlog import (
-    _parse_audit_log_model,
     disable_django_auditlog_augment,
     enable_django_auditlog_augment,
 )
@@ -14,16 +13,13 @@ from tests.models import DummyModel
 
 
 class DjangoAuditlogTestCase(TestCase):
-    @classmethod
-    def setUpClass(cls):
-        _parse_audit_log_model.cache_clear()
+    def setUp(self):
         enable_django_auditlog_augment()
-        return super(DjangoAuditlogTestCase, cls).setUpClass()
+        return super().setUp()
 
-    @classmethod
-    def tearDownClass(cls):
+    def tearDown(self):
         disable_django_auditlog_augment()
-        return super(DjangoAuditlogTestCase, cls).tearDownClass()
+        return super().tearDown()
 
     @pytest.mark.django_db
     def test_auditlog_augment(self):
