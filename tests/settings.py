@@ -1,8 +1,11 @@
 DATABASES = {"default": {"ENGINE": "django.db.backends.sqlite3", "NAME": ":memory:"}}
 
 INSTALLED_APPS = (
+    "django.contrib.auth",
+    "django.contrib.contenttypes",
     "logger_extra",
     "tests",
+    "auditlog",
 )
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
@@ -59,6 +62,7 @@ LOGGING = {
 SECRET_KEY = "secret"
 
 ROOT_URLCONF = "tests.urls"
+LOGGER_EXTRA_AUGMENT_DJANGO_AUDITLOG = True
 
 USE_TZ = True
 DEBUG = True
