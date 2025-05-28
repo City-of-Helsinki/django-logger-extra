@@ -1,6 +1,6 @@
 from unittest import mock
 
-from django.test import TestCase
+import pytest
 
 from logger_extra.extras.django_auditlog import (
     disable_django_auditlog_augment,
@@ -8,14 +8,16 @@ from logger_extra.extras.django_auditlog import (
 )
 
 
-class ExtrasTestCase(TestCase):
-    def tearDown(self):
-        disable_django_auditlog_augment()
-        return super().tearDown()
+@pytest.fixture(autouse=True)
+def setup_and_teardown():
+    yield
+    disable_django_auditlog_augment()
 
-    def test_auditlog_present(self):
-        assert enable_django_auditlog_augment()
 
-    @mock.patch("logger_extra.extras.django_auditlog.has_auditlog", False)
-    def test_auditlog_missing(self):
-        assert not enable_django_auditlog_augment()
+def test_auditlog_present():
+    assert enable_django_auditlog_augment()
+
+
+@mock.patch("logger_extra.extras.django_auditlog.has_auditlog", False)
+def test_auditlog_missing():
+    assert not enable_django_auditlog_augment()

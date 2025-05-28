@@ -12,7 +12,7 @@ try:
     LogEntry = AuditLogEntry
     has_auditlog = True
 except ImportError:
-    LogEntry = Model
+    LogEntry = None
     has_auditlog = False
 
 
