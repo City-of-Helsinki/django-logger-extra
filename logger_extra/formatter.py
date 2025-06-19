@@ -18,7 +18,7 @@ class JSONFormatter(logging.Formatter):
             "message": record.getMessage(),
             "level": record.levelname,
             "name": record.name,
-            "time": timezone.now(),
+            "time": timezone.now().isoformat(),
             "context": extra,
         }
 
