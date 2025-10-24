@@ -68,7 +68,6 @@ dependencies = [
 features = ["all"]
 python = "3.9"
 type = "virtual"
-path = ".venv"
 
 [tool.hatch.envs.default.scripts]
 test = "pytest {args}"
@@ -78,31 +77,31 @@ lint = [
 ]
 manage = "python tests/manage.py {args}"
 
-[tool.hatch.envs.hatch-test]
+[tool.hatch.envs.compat-tests]
 default-args = ["tests"]
 features = ["all"]
 matrix-name-format = "dj{value}"
 parallel = false
 randomize = true
 
-[[tool.hatch.envs.hatch-test.matrix]]
+[[tool.hatch.envs.compat-tests.matrix]]
 python = ["3.9"]
 django = ["4.2"]
 
-[[tool.hatch.envs.hatch-test.matrix]]
+[[tool.hatch.envs.compat-tests.matrix]]
 python = ["3.10", "3.11", "3.12"]
 django = ["4.2", "5.0", "5.1", "5.2"]
 
-[[tool.hatch.envs.hatch-test.matrix]]
+[[tool.hatch.envs.compat-tests.matrix]]
 python = ["3.13"]
 django = ["5.1", "5.2"]
 
-[tool.hatch.envs.hatch-test.overrides]
+[tool.hatch.envs.compat-tests.overrides]
 matrix.django.dependencies = [
     { value = "django~={matrix:django}" },
 ]
 
-[tool.hatch.envs.hatch-test.scripts]
+[tool.hatch.envs.compat-tests.scripts]
 run = [
     "pytest{env:HATCH_TEST_ARGS:} {args}",
 ]
