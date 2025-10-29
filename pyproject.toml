@@ -41,6 +41,7 @@ dependencies = ["django>=4.2",]
 [project.optional-dependencies]
 test = [
     "pytest",
+    "pytest-cov",
     "pytest-django",
     "coverage-enable-subprocess",
     "coverage[toml]",
