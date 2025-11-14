@@ -31,7 +31,7 @@ To install this logger, add `INSTALLED_APPS` in settings.py:
 
 ```python
 INSTALLED_APPS = (
-    'logger_extra',
+    "logger_extra",
     ...
 )
 ```
@@ -42,23 +42,23 @@ Filter is optional and brings `logger_context()` contexts available as logger ex
 
 ```python
 LOGGING = {
-    'filters': {
-        'context': {
-            '()': 'logger_extra.filter.LoggerContextFilter',
+    "filters": {
+        "context": {
+            "()": "logger_extra.filter.LoggerContextFilter",
         }
         ...
     },
-    'formatters': {
-        'json': {
-            '()': 'logger_extra.formatter.JSONFormatter',
+    "formatters": {
+        "json": {
+            "()": "logger_extra.formatter.JSONFormatter",
         }
         ...
     },
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'json',
-            'filters': ['context']
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json",
+            "filters": ["context"]
         },
         ...
     },
@@ -69,7 +69,7 @@ LOGGING = {
 ### Configuring middleware in settings.py:
 ```python
 MIDDLEWARE = [
-    'logger_extra.middleware.XRequestIdMiddleware',
+    "logger_extra.middleware.XRequestIdMiddleware",
     ...
 ]
 ```
