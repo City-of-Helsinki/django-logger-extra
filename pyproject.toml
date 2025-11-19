@@ -47,6 +47,7 @@ test = [
     "pytest-randomly",
     "pytest-rerunfailures",
     "pytest-xdist[psutil]",
+    "freezegun",
 ]
 auditlog = ["django-auditlog"]
 all = ["django-logger-extra[auditlog]", "django-logger-extra[test]"]

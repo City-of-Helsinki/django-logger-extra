@@ -9,6 +9,7 @@
     - [Configuring middleware in settings.py:](#configuring-middleware-in-settingspy)
   - [django-auditlog extra context.](#django-auditlog-extra-context)
   - [Logger context usage](#logger-context-usage)
+  - [Gunicorn Logging Formatters](#gunicorn-logging-formatters)
 - [Development](#development)
   - [Running tests](#running-tests)
   - [Code format](#code-format)
@@ -105,6 +106,89 @@ def foo():
 
 Will result log entry that looks like:
 `{"message": "Hello World", "level": "INFO", "time": "2025-04-14T11:08:22.962222+00:00", "context": {"request_id": "95e787b5-4ce8-46ef-bb6e-31651fc8774b", "greet": "Hello", "who": "World"}}`
+
+
+## Gunicorn Logging Formatters
+
+This package includes two helpers to format Gunicorn access and error logs as
+structured JSON: `JsonFormatter` and `JsonErrorFormatter` (available at
+`logger_extra.extras.gunicorn`).
+
+Use the following `logconfig_dict` in your Gunicorn configuration (default:
+`gunicorn.conf.py`) to enable JSON output and include the logger context
+filter so request context is available in logs:
+
+```python
+from logger_extra.extras.gunicorn import JsonErrorFormatter, JsonFormatter
+
+logconfig_dict = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "filters": {
+        "context": {
+            "()": "logger_extra.filter.LoggerContextFilter",
+        }
+    },
+    "formatters": {
+        "json": {
+            "()": JsonFormatter,
+        },
+        "json_error": {
+            "()": JsonErrorFormatter,
+        },
+    },
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json",
+            "filters": ["context"],
+            "stream": "ext://sys.stdout",
+        },
+        "error_console": {
+            "class": "logging.StreamHandler",
+            "formatter": "json_error",
+            "filters": ["context"],
+            "stream": "ext://sys.stderr",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+    "loggers": {
+        "gunicorn.access": {
+            "level": "INFO",
+            "handlers": ["console"],
+            "propagate": False,
+        },
+        "gunicorn.error": {
+            "level": "INFO",
+            "handlers": ["error_console"],
+            "propagate": False,
+        },
+    },
+}
+
+```
+
+Notes:
+
+- **Access logs**: `JsonFormatter` expects Gunicorn access log fields
+  and will produce a JSON object containing time (in UTC),
+  request/response metadata, and any active logger context.
+- **Error logs**: `JsonErrorFormatter` formats error messages with an
+  ISO 8601 UTC timestamp and the log message. Also note that despite the
+  name, all records logged in `gunicorn.error` are not errors, e.g.
+  gunicorn's start-up messages are logged through this.
+- **Context filter**: Adding `logger_extra.filter.LoggerContextFilter`
+  to the `filters` and attaching it to handlers ensures context created
+  by `logger_extra.logger_context` is included under `request_id` and
+  other context keys.
+- **Gunicorn usage**: If you're using a non-default name for your
+  config file, point Gunicorn to your config file when starting,
+  e.g. `gunicorn -c my_gunicorn_conf.py myapp.wsgi:application`.
+
+
 # Development
 
 Virtual Python environment can be used. For example:
