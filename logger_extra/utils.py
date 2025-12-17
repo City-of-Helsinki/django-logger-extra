@@ -2,7 +2,6 @@ import logging
 from datetime import date, datetime
 from socket import socket
 from typing import Any
-from uuid import UUID
 
 from django.http import HttpRequest
 
@@ -74,9 +73,5 @@ def json_serialize(input: object):
             "path": input.path,
         }
 
-    if isinstance(input, UUID):
-        return str(input)
-
-    # If you see this TypeError related to object not being serializable,
-    # it means that it should be most likely handled in here.
-    return input
+    # Default to str, should be applicable in most cases.
+    return str(input)
