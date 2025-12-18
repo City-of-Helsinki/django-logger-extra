@@ -1,6 +1,13 @@
 <!-- DOCTOC SKIP -->
 # Changelog
 
+## [1.1.1](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.1.0...v1.1.1) (2025-12-18)
+
+
+### Bug Fixes
+
+* Default to str in json serialization ([f56b71c](https://github.com/City-of-Helsinki/django-logger-extra/commit/f56b71c3ff5829cb8d80d7b020780177c13bad21))
+
 ## [1.1.0](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.0.0...v1.1.0) (2025-11-20)
 
 
