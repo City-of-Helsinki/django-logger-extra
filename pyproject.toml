@@ -41,11 +41,8 @@ test = [
     "pytest",
     "pytest-cov",
     "pytest-django",
-    "coverage-enable-subprocess",
     "coverage[toml]",
     "pytest-randomly",
-    "pytest-rerunfailures",
-    "pytest-xdist[psutil]",
     "freezegun",
 ]
 auditlog = ["django-auditlog"]
