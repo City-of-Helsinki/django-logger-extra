@@ -1,6 +1,13 @@
 <!-- DOCTOC SKIP -->
 # Changelog
 
+## [1.1.2](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.1.1...v1.1.2) (2026-04-13)
+
+
+### Dependencies
+
+* Drop support for django 4.2, 5.1, add 6.0 support ([5eedbc6](https://github.com/City-of-Helsinki/django-logger-extra/commit/5eedbc6ba24d1ef7505d90c170d11ad997757c7d))
+
 ## [1.1.1](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.1.0...v1.1.1) (2025-12-18)
 
 
