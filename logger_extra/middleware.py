@@ -1,10 +1,13 @@
+import logging
 import uuid
 from collections.abc import Callable
 
 from django.http import HttpRequest, HttpResponse
 
+from logger_extra.apps import LIB_NAME
 from logger_extra.logger_context import logger_context
 
+logger = logging.getLogger(LIB_NAME)
 GetResponseFn = Callable[[HttpRequest], HttpResponse]
 
 
@@ -24,8 +27,20 @@ class RequestIdMiddlewareBase:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest):
-        # Get request id from source header or generate one here.
-        request_id = request.headers.get(self.request_header, uuid.uuid4())
+        request_id = request.headers.get(self.request_header)
+
+        if not request_id:
+            request_id = str(uuid.uuid4())
+            logger.error(
+                "Request is missing %s header, using generated one instead.",
+                self.request_header,
+                extra={
+                    "path": request.path,
+                    "method": request.method,
+                    "header_name": self.request_header,
+                    "generated_id": request_id,
+                },
+            )
 
         with logger_context({"request_id": request_id}):
             response = self.get_response(request)

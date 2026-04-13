@@ -46,7 +46,8 @@ test = [
     "freezegun",
 ]
 auditlog = ["django-auditlog"]
-all = ["django-logger-extra[auditlog]", "django-logger-extra[test]"]
+sentry = ["sentry-sdk"]
+all = ["django-logger-extra[auditlog]", "django-logger-extra[sentry]", "django-logger-extra[test]"]
 
 [project.urls]
 Homepage = "https://github.com/City-of-Helsinki/django-logger-extra"
