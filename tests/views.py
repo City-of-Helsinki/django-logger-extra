@@ -4,7 +4,8 @@ from django.http import HttpResponse, JsonResponse
 
 from logger_extra.logger_context import logger_context
 
-logger = logging.getLogger(__name__)
+VIEWS_LOGGER_NAME = "test_views"
+logger = logging.getLogger(VIEWS_LOGGER_NAME)
 
 
 def nop(*_, **__):
