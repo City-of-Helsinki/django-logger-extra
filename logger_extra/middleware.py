@@ -15,7 +15,7 @@ class RequestIdMiddlewareBase:
     get_response: GetResponseFn
 
     # Safe characters only, reasonable length bounds (1-64 chars)
-    _REQUEST_ID_RE = re.compile(r"^[a-zA-Z0-9\-_]{1,64}$")
+    _REQUEST_ID_RE = re.compile(r"^[a-zA-Z0-9\-_]{1,64}\Z")
 
     def __init__(
         self,
