@@ -1,7 +1,10 @@
 import uuid
 
+import auditlog.context
 import pytest
 from auditlog.models import LogEntry
+from django.apps import apps
+from django.contrib.auth import get_user_model
 
 from logger_extra.extras.django_auditlog import (
     disable_django_auditlog_augment,
@@ -37,3 +40,111 @@ def test_auditlog_augment():
     assert additional_data.get("value1", None) == expected1
     assert additional_data.get("value2", None) == expected2
     assert additional_data.get("value3", None) == expected3
+
+
+@pytest.fixture()
+def mock_user():
+    """Basic mock user with email for masking."""
+    return get_user_model().objects.create(email="erkki.esimerkki@example.com")
+
+
+@pytest.fixture
+def cleanup_auditlog_patch():
+    """
+    Fixture to ensure the monkey patch is reverted after the test,
+    preventing state leakage into other tests.
+    """
+    original_set_extra_data = auditlog.context._set_extra_data  # pylint: disable=W0212
+    yield
+    auditlog.context._set_extra_data = original_set_extra_data  # pylint: disable=W0212
+    if hasattr(auditlog.context, "_logger_extra_patch_mask_actor_email"):
+        delattr(auditlog.context, "_logger_extra_patch_mask_actor_email")
+
+
+@pytest.mark.django_db
+def test_app_config_patches_set_actor_when_setting_true(
+    cleanup_auditlog_patch, mock_user, settings
+):
+    """
+    Check that actor_email address in auditlog entries are masked in a
+    set_actor context when LOGGER_EXTRA_MASK_ACTOR_EMAIL is True
+    """
+    settings.LOGGER_EXTRA_MASK_ACTOR_EMAIL = True
+    app_config = apps.get_app_config("logger_extra")
+    app_config.ready()
+
+    with auditlog.context.set_actor(mock_user):
+        DummyModel.objects.create(message="trigger auditlog")
+        log_entry = LogEntry.objects.last()
+
+        assert (
+            log_entry.actor_email != mock_user.email
+        ), "LogEntry.actor_email leaked full actor email in plaintext"
+        assert log_entry.actor_email == auditlog.diff.mask_str(
+            mock_user.email
+        ), "LogEntry.actor_email did not match masked email"
+
+
+@pytest.mark.django_db
+def test_app_config_patches_set_extra_data_when_setting_true(
+    cleanup_auditlog_patch, mock_user, settings
+):
+    """
+    Check that actor_email address in auditlog entries are masked in a
+    set_extra_data context when LOGGER_EXTRA_MASK_ACTOR_EMAIL is True
+    """
+    settings.LOGGER_EXTRA_MASK_ACTOR_EMAIL = True
+    app_config = apps.get_app_config("logger_extra")
+    app_config.ready()
+
+    with auditlog.context.set_extra_data({"actor_email": mock_user.email}):
+        DummyModel.objects.create(message="trigger auditlog")
+        log_entry = LogEntry.objects.last()
+
+        assert (
+            log_entry.actor_email != mock_user.email
+        ), "LogEntry.actor_email leaked full actor email in plaintext"
+        assert log_entry.actor_email == auditlog.diff.mask_str(
+            mock_user.email
+        ), "LogEntry.actor_email did not match masked email"
+
+
+@pytest.mark.django_db
+def test_app_config_does_not_patch_when_setting_false(
+    cleanup_auditlog_patch, mock_user, settings
+):
+    """
+    Check that email addresses in auditlog entries are not masked when
+    LOGGER_EXTRA_MASK_ACTOR_EMAIL is False.
+    """
+    settings.LOGGER_EXTRA_MASK_ACTOR_EMAIL = False
+    app_config = apps.get_app_config("logger_extra")
+    app_config.ready()
+
+    with auditlog.context.set_actor(mock_user):
+        dummy = DummyModel.objects.create(message="trigger auditlog")
+        log_entry = LogEntry.objects.get_for_object(dummy).first()
+
+        assert log_entry.actor_email, (
+            "LogEntry.actor_email was empty or missing, does django-auditlog have "
+            "breaking changes?"
+        )
+        assert log_entry.actor_email == mock_user.email, (
+            "LogEntry.actor_email did not match mock_user.email, does django-auditlog "
+            "have breaking changes?"
+        )
+
+    with auditlog.context.set_extra_data(
+        {"actor_email": "erika.esimerkki@example.com"}
+    ):
+        dummy = DummyModel.objects.create(message="trigger auditlog")
+        log_entry = LogEntry.objects.get_for_object(dummy).first()
+
+        assert log_entry.actor_email, (
+            "LogEntry.actor_email was empty or missing, does django-auditlog have "
+            "breaking changes?"
+        )
+        assert log_entry.actor_email == "erika.esimerkki@example.com", (
+            "LogEntry.actor_email did not match 'erika.esimerkki@example.com',"
+            "does django-auditlog have breaking changes?"
+        )
