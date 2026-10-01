@@ -64,3 +64,37 @@ def _augment_django_auditlog(sender: type[Model], instance: Model, **kwargs):
 
     for key, value in context.items():
         instance.additional_data[key] = json_serialize(value)
+
+
+def patch_mask_actor_email() -> bool:
+    """
+    Monkey patches django-auditlog's _set_extra_data to prevent leaking the actor's
+    email in plaintext form.
+
+    We patch `_set_extra_data` directly because auditlog connects its signals
+    dynamically per-request. A static pre_save signal here would execute too early
+    (before auditlog sets the email).
+
+    Returns:
+        bool: True if auditlog was found and the signal connected, False otherwise.
+    """
+    if not has_auditlog:
+        return False
+
+    import auditlog.context
+    import auditlog.diff
+
+    # Prevent double-patching during testing or multi-app setups
+    if getattr(auditlog.context, "_logger_extra_patch_mask_actor_email", False):
+        return True
+
+    original_set_extra_data = auditlog.context._set_extra_data  # pylint: disable=W0212
+
+    def set_extra_data_with_masked_actor_email(sender, instance, signal_duid, **kwargs):
+        original_set_extra_data(sender, instance, signal_duid, **kwargs)
+        if hasattr(instance, "actor_email") and instance.actor_email:
+            instance.actor_email = auditlog.diff.mask_str(instance.actor_email)
+
+    auditlog.context._set_extra_data = set_extra_data_with_masked_actor_email  # pylint: disable=W0212
+    auditlog.context._logger_extra_patch_mask_actor_email = True
+    return True
