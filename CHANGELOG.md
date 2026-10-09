@@ -1,6 +1,13 @@
 <!-- DOCTOC SKIP -->
 # Changelog
 
+## [1.2.0](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.1.2...v1.2.0) (2026-10-09)
+
+
+### Features
+
+* Actor email patches for django-auditlog, django-resilient-logger ([6b7c2b6](https://github.com/City-of-Helsinki/django-logger-extra/commit/6b7c2b6b3847c59fa6be8af2153760f94ee0346f))
+
 ## [1.1.2](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.1.1...v1.1.2) (2026-04-13)
 
 
