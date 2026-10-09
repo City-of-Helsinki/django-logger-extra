@@ -1,6 +1,23 @@
 <!-- DOCTOC SKIP -->
 # Changelog
 
+## [1.3.0](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.2.0...v1.3.0) (2026-10-09)
+
+
+### Features
+
+* Add request id validation to middleware ([ef3a33e](https://github.com/City-of-Helsinki/django-logger-extra/commit/ef3a33e8522fd03e45c2e3f659ec39a82d70d833))
+
+
+### Bug Fixes
+
+* Replace end-of-line with end-of-string ([abbfcb7](https://github.com/City-of-Helsinki/django-logger-extra/commit/abbfcb78901134592bd75b73d633c243e4b1540a))
+
+
+### Dependencies
+
+* Django-resilient-logger patch requires version &gt;= 3.1.0 ([f690662](https://github.com/City-of-Helsinki/django-logger-extra/commit/f690662579398e193a836483b4681d6fec411a0f))
+
 ## [1.2.0](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.1.2...v1.2.0) (2026-10-09)
 
 
