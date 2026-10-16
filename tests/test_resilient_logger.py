@@ -37,12 +37,12 @@ def test_resolve_actor_with_string_uuid_and_email():
 
     assert result["uuid"] == test_uuid_str
     assert result["version"] == uuid.UUID(test_uuid_str).version
-    assert (
-        result["email"] != test_email
-    ), "Actor email should not have been present in plaintext in the result"
-    assert result["email"] == auditlog.diff.mask_str(
-        test_email
-    ), "Actor email does not match expected masked version"
+    assert result["email"] != test_email, (
+        "Actor email should not have been present in plaintext in the result"
+    )
+    assert result["email"] == auditlog.diff.mask_str(test_email), (
+        "Actor email does not match expected masked version"
+    )
 
 
 def test_resolve_actor_with_uuid_object_and_no_email():

@@ -77,12 +77,12 @@ def test_app_config_patches_set_actor_when_setting_true(
         DummyModel.objects.create(message="trigger auditlog")
         log_entry = LogEntry.objects.last()
 
-        assert (
-            log_entry.actor_email != mock_user.email
-        ), "LogEntry.actor_email leaked full actor email in plaintext"
-        assert log_entry.actor_email == auditlog.diff.mask_str(
-            mock_user.email
-        ), "LogEntry.actor_email did not match masked email"
+        assert log_entry.actor_email != mock_user.email, (
+            "LogEntry.actor_email leaked full actor email in plaintext"
+        )
+        assert log_entry.actor_email == auditlog.diff.mask_str(mock_user.email), (
+            "LogEntry.actor_email did not match masked email"
+        )
 
 
 @pytest.mark.django_db
@@ -101,12 +101,12 @@ def test_app_config_patches_set_extra_data_when_setting_true(
         DummyModel.objects.create(message="trigger auditlog")
         log_entry = LogEntry.objects.last()
 
-        assert (
-            log_entry.actor_email != mock_user.email
-        ), "LogEntry.actor_email leaked full actor email in plaintext"
-        assert log_entry.actor_email == auditlog.diff.mask_str(
-            mock_user.email
-        ), "LogEntry.actor_email did not match masked email"
+        assert log_entry.actor_email != mock_user.email, (
+            "LogEntry.actor_email leaked full actor email in plaintext"
+        )
+        assert log_entry.actor_email == auditlog.diff.mask_str(mock_user.email), (
+            "LogEntry.actor_email did not match masked email"
+        )
 
 
 @pytest.mark.django_db

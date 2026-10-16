@@ -9,7 +9,7 @@ class JsonFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord):
         response_time = datetime.datetime.strptime(
             record.args["t"], "[%d/%b/%Y:%H:%M:%S %z]"
-        ).astimezone(datetime.timezone.utc)
+        ).astimezone(datetime.UTC)
         url = record.args["U"]
         if record.args["q"]:
             url += f"?{record.args['q']}"
@@ -38,9 +38,7 @@ class JsonFormatter(logging.Formatter):
 
 class JsonErrorFormatter(logging.Formatter):
     def format(self, record: logging.LogRecord):
-        created_at = datetime.datetime.fromtimestamp(
-            record.created, tz=datetime.timezone.utc
-        )
+        created_at = datetime.datetime.fromtimestamp(record.created, tz=datetime.UTC)
         formatted = {
             "time": created_at.isoformat(),
             "source": "gunicorn.error",
