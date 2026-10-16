@@ -9,6 +9,7 @@
     - [Configuring middleware in settings.py:](#configuring-middleware-in-settingspy)
   - [django-auditlog extra context.](#django-auditlog-extra-context)
   - [Logger context usage](#logger-context-usage)
+  - [django-resilient-logger resolve_actor patch](#django-resilient-logger-resolve_actor-patch)
   - [Gunicorn Logging Formatters](#gunicorn-logging-formatters)
 - [Development](#development)
   - [Running tests](#running-tests)
