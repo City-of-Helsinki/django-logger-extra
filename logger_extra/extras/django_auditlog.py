@@ -1,10 +1,30 @@
+import logging
+from importlib.metadata import version, PackageNotFoundError
+from packaging.version import Version, InvalidVersion
+
+from django.core.exceptions import ImproperlyConfigured
 from django.db.models import Model
 from django.db.models.signals import pre_save
 
 from logger_extra.logger_context import get_logger_context
 from logger_extra.utils import json_serialize
 
+logger = logging.getLogger(__name__)
+
 DISPATCH_UID = "LoggerExtraDjangoAuditlog"
+
+INFO_BEST_EFFORT_CHECKS_PASSED = """
+Best-effort checks passed, but consider including tests for PII leaks in your user
+code. Please report the results of your tests to the django-logger-extra project
+so we can update this version compatibility check and/or update our patch."""
+
+WARNING_NEWER_AUDITLOG_VERSION = """
+django-auditlog version is {version}. The actor email masking patch was designed
+for django-auditlog == 3.4.1."""
+
+WARNING_UNKNOWN_AUDITLOG_VERSION = """
+Unable to determine version of django-auditlog package. The actor email masking
+patch was designed for django-auditlog == 3.4.1."""
 
 try:
     from auditlog.models import LogEntry as AuditLogEntry
@@ -88,6 +108,40 @@ def patch_mask_actor_email() -> bool:
     if getattr(auditlog.context, "_logger_extra_patch_mask_actor_email", False):
         return True
 
+    # Best-effort checks that the library's internals are still more or less what we expect it to be.
+    if not hasattr(auditlog.context, "_set_extra_data") or not callable(
+        auditlog.context._set_extra_data  # pylint: disable=W0212
+    ):
+        raise ImproperlyConfigured(
+            "Attempting to patch actor_email in django-auditlog, but the internal structure in the installed "
+            "version is different from the expected. auditlog.context _set_extra_data is missing."
+        )
+
+    if not hasattr(LogEntry, "actor_email"):
+        raise ImproperlyConfigured(
+            "Attempting to patch actor_email in django-auditlog, but the internal structure in the installed "
+            "version is different from the expected. auditlog.models.LogEntry.author_email is missing."
+        )
+
+    try:
+        auditlog_version_str = version("django-auditlog")
+        if Version(auditlog_version_str) > Version("3.4.1"):
+            logger.warning(INFO_BEST_EFFORT_CHECKS_PASSED)
+            logger.warning(
+                WARNING_NEWER_AUDITLOG_VERSION.format(version=auditlog_version_str)
+            )
+    except InvalidVersion:
+        logger.warning(INFO_BEST_EFFORT_CHECKS_PASSED)
+        logger.warning(WARNING_UNKNOWN_AUDITLOG_VERSION)
+    except PackageNotFoundError:
+        logger.warning(INFO_BEST_EFFORT_CHECKS_PASSED)
+        logger.warning(WARNING_UNKNOWN_AUDITLOG_VERSION)
+
+    # A monkey patch is required here because the public API of django-auditlog 3.4.1 falls short:
+    # - Custom middleware misses background tasks (Celery/cron) and management commands, leaking PII.
+    # - Standard `pre_save` signals execute before auditlog dynamically attaches the actor email in plaintext.
+
+    # Best-effort checks passed (with or without warnings), carry on and apply the patch.
     original_set_extra_data = auditlog.context._set_extra_data  # pylint: disable=W0212
 
     def set_extra_data_with_masked_actor_email(sender, instance, signal_duid, **kwargs):
