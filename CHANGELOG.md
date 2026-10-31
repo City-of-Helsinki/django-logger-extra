@@ -1,6 +1,15 @@
 <!-- DOCTOC SKIP -->
 # Changelog
 
+## [1.3.1](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.3.0...v1.3.1) (2026-10-31)
+
+
+### Dependencies
+
+* Add support for Django 6.1 ([ab42104](https://github.com/City-of-Helsinki/django-logger-extra/commit/ab4210467f9c1a435ad14f5598d70fcbff00d74e))
+* Add support for Python 3.15 ([4f2d6a5](https://github.com/City-of-Helsinki/django-logger-extra/commit/4f2d6a5a09d45f88ebab841af9f270ac9a469709))
+* Drop support for Python 3.10 ([a6ea44f](https://github.com/City-of-Helsinki/django-logger-extra/commit/a6ea44f348779a1c070ae41f77f5308d83b4ddf9))
+
 ## [1.3.0](https://github.com/City-of-Helsinki/django-logger-extra/compare/v1.2.0...v1.3.0) (2026-10-09)
 
 
